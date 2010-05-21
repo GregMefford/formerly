@@ -1,0 +1,10 @@
+ATtiny2313 8-bit microcontroller
+
+SYMBOL	PARAMETER					CONDITION			MIN.	TYP.	MAX.		UNITS
+VIL		Input Low Voltage except	VCC = 1.8V - 2.4V	-0.5			0.2VCC		V
+		XTAL 1 and RESET_n pin		VCC = 2.4V - 5.5V	-0.5
+                                                                        
+VIH		Input High-voltage except	VCC = 1.8V - 2.4V	0.7VCC			VCC + 0.5	V
+		XTAL1 and RESET pins		VCC = 2.4V - 5.5V	0.6V(3)
+                                                                        
+ICC		Power Supply Current		Idle 1MHz, VCC = 2V			0.08	0.2			mA
