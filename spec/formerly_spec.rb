@@ -32,21 +32,23 @@ describe Formerly, "Guesses where columns are in a space-aligned table" do
 #  I have already   done for this   example just to   make it
 #  easier           to read and     follow            along
   before(:all) do
-    @subject  = "This is some     columnar text   that acts like    a table\n"
+    @subject  = "This is some     columnar text   that acts like    a table\r\n"
     @subject << "when you expand  all the tabs    into spaces,      which\n"
-    @subject << "I have already   done for this   example just to   make it\n"
+    @subject << "I have already   done for this   example just to   make it\r\n"
     @subject << "easier           to read and     follow            along\n"
   end
 
   it "finds all possible columns" do
-    # Check each line
-    lines = @subject.split("\n")
     expected = [
       [ 5,  8, 17, 26, 33, 38, 43, 51, 53],
       [ 5,  9, 17, 21, 25, 33, 38, 51],
       [ 2,  7, 17, 22, 26, 33, 41, 46, 51, 56],
       [17, 20, 25, 33, 51]
     ]
-    Formerly.column_candidates(lines[0]).should == expected[0]
+    # Check each line
+    lines = @subject.split(/[\r\n]/).reject {|item| item == ""}
+    expected.each_index do |i|
+      Formerly.column_candidates(lines[i]).should == expected[i]
+    end
   end
 end

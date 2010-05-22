@@ -18,6 +18,20 @@ module Formerly
   end
   
   def self.column_candidates(line)
-    
+    candidates = []
+    # Make sure we get rid of the newline characters
+    line.rstrip!
+    # Use this variable to keep track of where we've already looked
+    search_start = 0
+    while true
+      # Find all the spaces followed by non-spaces
+      candidate = line.index(/ [^ ]/, search_start)
+      break if candidate.nil?
+      # We want the index of the character, not the space, thus the +1
+      candidates << candidate + 1
+      # Advance the starting point past the one we just found
+      search_start = candidate + 1
+    end
+    return candidates
   end
 end
