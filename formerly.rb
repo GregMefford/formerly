@@ -37,12 +37,36 @@ module Formerly
   
   def self.common_columns(lines)
     # Find all the candidates in each line
-    candidates = lines.map {|line| column_candidates(line)}
+    candidates = all_candidates(lines)
     # Find the set intersection across them all
     return candidates.inject {|columns, candidates| columns & candidates}
   end
   
   def self.find_tables(lines)
-    return [0..0, 1..5, 6..6, 7..9]
+    last_line = lines.length - 1
+    tables = []
+    # Yes, this is an O(n^2) algorithm. I don't really care.
+    lines.each_index do |start_line|
+      # For each line, find the following lines that match some of the columns
+      previous = []
+      (start_line..last_line).each do |end_line|
+        common = common_columns(lines[start_line..end_line])
+        if common == []
+          tables << [start_line..end_line-1, previous]
+          break
+        else
+          previous = common
+        end
+        # Special case for the last line in the file being a table member
+        tables << [start_line..end_line, common] if end_line == last_line
+      end
+    end
+    return tables.map {|entry| entry[0]}
+  end
+
+private
+  def self.all_candidates(lines)
+    # Find all the candidates in each line
+    return lines.map {|line| column_candidates(line)}
   end
 end
