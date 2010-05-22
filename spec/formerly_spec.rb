@@ -36,6 +36,7 @@ describe Formerly, "Guesses where columns are in a space-aligned table" do
     @subject << "when you expand  all the tabs    into spaces,      which\n"
     @subject << "I have already   done for this   example just to   make it\r\n"
     @subject << "easier           to read and     follow            along\n"
+    @lines = @subject.split(/[\r\n]/).reject {|item| item == ""}
   end
 
   it "finds all possible columns" do
@@ -46,9 +47,12 @@ describe Formerly, "Guesses where columns are in a space-aligned table" do
       [17, 20, 25, 33, 51]
     ]
     # Check each line
-    lines = @subject.split(/[\r\n]/).reject {|item| item == ""}
     expected.each_index do |i|
-      Formerly.column_candidates(lines[i]).should == expected[i]
+      Formerly.column_candidates(@lines[i]).should == expected[i]
     end
+  end
+  
+  it "guesses where the columns are given a group of candidates" do
+    Formerly.common_columns(@lines).should == [17, 33, 51]
   end
 end
