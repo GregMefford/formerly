@@ -1,6 +1,16 @@
 #formerly.rb
 
 module Formerly
+  def self.parse(lines, options)
+    {:tab_size => 4}.merge! options
+    lines = lines.map do |line|
+      Formerly.tabs_to_spaces(line, options[:tab_size])
+    end
+    # Throw away (blank) lines that don't have a non-space character in them
+    lines.reject! {|line| line !~ /[^\s]/}
+    return Formerly.find_and_parse_all_tables(lines)
+  end
+  
   def self.tabs_to_spaces(line, size=8)
     # Tweaked based on code from http://www.bloovis.com/wordpress/?p=19
     # What is does:
