@@ -115,6 +115,9 @@ module Formerly
     end
     return parsed_array
   end
+  
+  def self.find_and_parse_all_tables(lines)
+  end
 
 private
   def self.all_candidates(lines)

@@ -111,5 +111,27 @@ describe Formerly, "Parses multiple different-sized tables in a document" do
       ["easier",           "to read and",     "follow",            "along"]
     ]
   end
-
+  
+  it "pulls data from all tables in the document into an array of arrays" do
+    Formerly.find_and_parse_all_tables(@lines).should == [
+      [
+        ["Here", "is", "a", "file", "header,", "just", "for", "good", "measure", "and", "confusion"]
+      ],
+      [
+        ["This is a header", "that happens to", "match the content", "columns"],
+        ["This is some",     "columnar text",   "that acts like",    "a table"],
+        ["when you expand",  "all the tabs",    "into spaces,",      "which"],
+        ["I have already",   "done for this",   "example just to",   "make it"],
+        ["easier",           "to read and",     "follow",            "along"]
+      ],
+      [
+        ["This", "header", "obviously", "doesn't", "match", "up", "with", "the", "content"]
+      ],
+      [
+        ["This",          "is a",        "smaller",     "table"],
+        ["designed to",   "demonstrate", "that is can", "find"],
+        ["two different", "tables with", "different",   "dimensions"]
+      ]
+    ]    
+  end
 end
