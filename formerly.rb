@@ -95,6 +95,9 @@ module Formerly
     end
     return tables
   end
+  
+  def self.parse_single_table(lines, range, calumns)
+  end
 
 private
   def self.all_candidates(lines)

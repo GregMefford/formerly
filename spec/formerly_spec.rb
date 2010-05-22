@@ -99,4 +99,17 @@ describe Formerly, "Parses multiple different-sized tables in a document" do
     expected = [file_header, table_1, table_2_header, table_2]
     Formerly.find_tables(@lines).should == expected
   end
+  
+  it "pulls the data out of the cells it found into a Ruby Array" do
+    tables = Formerly.find_tables(@lines)
+    range, columns = tables[1]
+    Formerly.parse_single_table(@lines, range, columns).should == [
+      ["This is a header", "that happens to", "match the content", "columns"],
+      ["This is some",     "columnar text",   "that acts like",    "a table"],
+      ["when you expand",  "all the tabs",    "into spaces,",      "which"],
+      ["I have already",   "done for this",   "example just to",   "make it"],
+      ["easier",           "to read and",     "follow",            "along"]
+    ]
+  end
+
 end
