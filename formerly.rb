@@ -61,6 +61,38 @@ module Formerly
         tables << [start_line..end_line, common] if end_line == last_line
       end
     end
+    # At this point, we should have collected all the possible tables
+    # and we just need to eliminate the sub-optimal ones (proper subsets, etc)
+    tables.reject! do |range, columns|
+      tables.any? do |other_range, other_columns|
+        # Don't compare the range with itself
+        if range == other_range
+          false
+        else
+          # This range is a proper subset of another in the table list
+          other_range.member? range.first and other_range.member? range.last
+        end
+      end
+    end
+    # Now what we have are some (probably good) tables,
+    # but if there are non-tabular header rows, they may be encroaching into
+    # part of the table that happens to match.
+    # The best we can do is just truncate any ranges where another range
+    # starts in the middle of it.
+    tables.each_with_index do |item, i|
+      range, columns = item
+      tables.each do |other_range, other_columns|
+        # Don't compare the range with itself
+        next if range == other_range
+        # This the other range starts in the middle of the current one,
+        if range.member? other_range.first
+          # truncate the current one and re-scan the columns for it
+          range = range.first..other_range.first-1
+          columns = common_columns(lines[range])
+          tables[i] = [range, columns]
+        end
+      end
+    end
     return tables.map {|entry| entry[0]}
   end
 
