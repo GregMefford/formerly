@@ -56,3 +56,47 @@ describe Formerly, "Guesses where columns are in a space-aligned table" do
     Formerly.common_columns(@lines).should == [17, 33, 51]
   end
 end
+
+describe Formerly, "Parses multiple different-sized tables in a document" do
+# For manually calculating my expected outcome, here it is with a ruler:
+#     |0   |5   |10  |15  |20  |25  |30  |35  |40  |45  |50  |55  |60
+# 0: Here is a file header, just for good measure and confusion
+#
+# 1: This is a header that happens to match the content columns
+# 2: This is some     columnar text   that acts like    a table
+# 3: when you expand  all the tabs    into spaces,      which
+# 4: I have already   done for this   example just to   make it
+# 5: easier           to read and     follow            along
+#
+# 6: This header obviously does not match up with the content
+# 7: This     is    a           smaller       table
+# 8: designed to    demonstrate that is can   find
+# 9: two different  tables with different     dimensions
+  before(:all) do
+    @subject  = "Here is a file header, just for good measure and confusion\r\n"
+    @subject << "\r\n"
+    @subject << "This is a header that happens to match the content columns\r\n"
+    @subject << "This is some     columnar text   that acts like    a table\r\n"
+    @subject << "when you expand  all the tabs    into spaces,      which\n"
+    @subject << "I have already   done for this   example just to   make it\r\n"
+    @subject << "easier           to read and     follow            along\n"
+    @subject << "\n"
+    @subject << "\r"
+    @subject << "\r\n"
+    @subject << "This header obviously does not match up with the content\r\n"
+    @subject << "This     is    a           smaller       table\r\n"
+    @subject << "designed to    demonstrate that is can   find\n"
+    @subject << "two different  tables with different     dimensions\r\n"
+    @lines = @subject.split(/[\r\n]/).reject {|item| item == ""}
+  end
+
+  it "finds the lines that are likely to comprise a table" do
+    file_header = 0..0
+    # Nothing I can do about this header getting merged into the table. :,(
+    table_1 = 1..5
+    table_2_header = 6..6
+    table_2 = 7..9
+    expected = [file_header, table_1, table_2_header, table_2]
+    Formerly.find_tables(@lines).should == expected
+  end
+end
