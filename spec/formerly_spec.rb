@@ -91,11 +91,11 @@ describe Formerly, "Parses multiple different-sized tables in a document" do
   end
 
   it "finds the lines that are likely to comprise a table" do
-    file_header = 0..0
+    file_header = [0..0, [5, 8, 10, 15, 23, 28, 32, 37, 45, 49]]
     # Nothing I can do about this header getting merged into the table. :,(
-    table_1 = 1..5
-    table_2_header = 6..6
-    table_2 = 7..9
+    table_1 = [1..5, [17, 33, 51]]
+    table_2_header = [6..6, [5, 12, 22, 30, 36, 39, 44, 48]]
+    table_2 = [7..9, [15, 27, 41]]
     expected = [file_header, table_1, table_2_header, table_2]
     Formerly.find_tables(@lines).should == expected
   end

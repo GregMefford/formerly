@@ -93,7 +93,7 @@ module Formerly
         end
       end
     end
-    return tables.map {|entry| entry[0]}
+    return tables
   end
 
 private
