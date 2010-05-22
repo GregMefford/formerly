@@ -83,8 +83,8 @@ describe Formerly, "Parses multiple different-sized tables in a document" do
     @subject << "\n"
     @subject << "\r"
     @subject << "\r\n"
-    @subject << "This header obviously does not match up with the content\r\n"
-    @subject << "This     is    a           smaller       table\r\n"
+    @subject << "This header obviously doesn't match up with the content\r\n"
+    @subject << "This           is a        smaller       table\r\n"
     @subject << "designed to    demonstrate that is can   find\n"
     @subject << "two different  tables with different     dimensions\r\n"
     @lines = @subject.split(/[\r\n]/).reject {|item| item == ""}
