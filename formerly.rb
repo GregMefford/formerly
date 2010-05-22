@@ -117,6 +117,12 @@ module Formerly
   end
   
   def self.find_and_parse_all_tables(lines)
+    parsed_tables = []
+    tables = find_tables(lines)
+    tables.each do |range, columns|
+      parsed_tables << parse_single_table(lines, range, columns)
+    end
+    return parsed_tables
   end
 
 private
