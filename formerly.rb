@@ -96,7 +96,24 @@ module Formerly
     return tables
   end
   
-  def self.parse_single_table(lines, range, calumns)
+  def self.parse_single_table(lines, range, columns)
+    parsed_array = []
+    lines[range].each do |line|
+      parsed_line = []
+      start_index = 0
+      # Pull out the text from each slot in the columns list
+      columns.each do |end_index|
+        # Strip off white space before and after it to clean it up.
+        parsed_line << line[start_index..end_index-1].strip
+        # Advance to the next slot
+        start_index = end_index
+      end
+      # Special case for the tail of the line:
+      parsed_line << line[start_index..-1].strip
+      # Push the parsed line into the array
+      parsed_array << parsed_line
+    end
+    return parsed_array
   end
 
 private
