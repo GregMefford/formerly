@@ -34,4 +34,8 @@ module Formerly
     end
     return candidates
   end
+  
+  def self.common_columns(lines)
+    return [17, 33, 51]
+  end
 end
