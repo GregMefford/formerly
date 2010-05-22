@@ -36,6 +36,9 @@ module Formerly
   end
   
   def self.common_columns(lines)
-    return [17, 33, 51]
+    # Find all the candidates in each line
+    candidates = lines.map {|line| column_candidates(line)}
+    # Find the set intersection across them all
+    return candidates.inject {|columns, candidates| columns & candidates}
   end
 end
